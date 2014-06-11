@@ -18,8 +18,7 @@ def call_method(module, method, rest_method, **kwarg):
                     return func(**kwarg)
                 else :
                     cherrypy.response.status = 405
-
-                return None
+                    return None
             else:
                 return 'No method \'%s\' in module \'%s\'' % ( method, module )
         except Exception as e:
