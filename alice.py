@@ -18,12 +18,15 @@ def call_method(module, method, rest_method, **kwarg):
                     return func(**kwarg)
                 else :
                     cherrypy.response.status = 405
-                    return None
+                    return 'Method \'%s\' in module \'%s\' doesn\'t support %s requests' % ( method, module, rest_method )
             else:
+                cherrypy.response.status = 501
                 return 'No method \'%s\' in module \'%s\'' % ( method, module )
         except Exception as e:
+            cherrypy.response.status = 500
             return 'Error: ' + str(e)
     else:
+        cherrypy.response.status = 404
         return 'No module named \'%s\'' % (module)
 
 def load_modules():
