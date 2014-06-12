@@ -65,10 +65,22 @@ class Alice(object):
         cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']
 
+    def shutdown(self) :
+        print('===== Exiting =====')
+        for mod_name in modules :
+            try :
+                deinit_func = getattr(modules[mod_name], 'deinit')
+                deinit_func()
+            except AttributeError as e :
+                print ('Error while deinitializing module \'' + mod_name + '\': ' + str(e))
+
+        sys.exit()
+
 if __name__ == '__main__':
     load_modules()
+    alice = Alice()
 
-    cherrypy.engine.signal_handler.handlers["SIGINT"] = sys.exit
+    cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
     conf = {
         'global' : {
             'server.socket_host': config.host,
@@ -82,4 +94,4 @@ if __name__ == '__main__':
         }
     }
     print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')
-    cherrypy.quickstart(Alice(), '/', conf)
+    cherrypy.quickstart(alice, '/', conf)
