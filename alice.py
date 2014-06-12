@@ -32,7 +32,20 @@ def call_method(module, method, rest_method, **kwarg):
 def load_modules():
     for mod_name in config.module_list:
         mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
-        modules[mod_name] = getattr(mod, mod_name)()
+
+        # create a module instance
+        try :
+            modules[mod_name] = getattr(mod, mod_name)()
+
+            # initialize the module
+            try :
+                init_func = getattr(modules[mod_name], 'init')
+                init_func()
+            except AttributeError as e :
+                print ('Error while initializing module \'' + mod_name + '\': ' + str(e))
+
+        except AttributeError as e :
+            print ('Error while loading module \'' + mod_name + '\': ' + str(e))
 
 
 class Alice(object):

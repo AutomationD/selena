@@ -3,6 +3,9 @@
 from .. import registry
 
 class weather:
+    def init(self) :
+        pass
+
     @registry.GET('weather')
     def temperature():
         return "Temp: 20 C"
