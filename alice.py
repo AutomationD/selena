@@ -3,6 +3,7 @@
 import cherrypy
 import config
 import sys
+import json
 import modules.registry as registry
 
 modules = {}
@@ -52,8 +53,11 @@ class Alice(object):
     exposed = True
 
     @cherrypy.tools.accept(media='text/plain')
-    def GET(self, module, method, **kwarg):
-        return call_method(module, method, 'GET', **kwarg)
+    def GET(self, module, method='', **kwarg):
+        if module == 'modules' :
+            return json.dumps(config.module_list).encode('utf-8')
+        else :
+            return call_method(module, method, 'GET', **kwarg)
 
     @cherrypy.tools.accept(media='text/plain')
     def POST(self, module, method, **kwarg):
