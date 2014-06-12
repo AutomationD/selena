@@ -52,14 +52,13 @@ def load_modules():
 class Alice(object):
     exposed = True
 
-    @cherrypy.tools.accept(media='text/plain')
+    '''
     def GET(self, module, method='', **kwarg):
         if module == 'modules' :
             return json.dumps(config.module_list).encode('utf-8')
         else :
             return call_method(module, method, 'GET', **kwarg)
 
-    @cherrypy.tools.accept(media='text/plain')
     def POST(self, module, method, **kwarg):
         return call_method(module, method, 'POST', **kwarg)
 
@@ -68,6 +67,7 @@ class Alice(object):
         cherrypy.response.headers['Access-Control-Allow-Origin'] = cherrypy.request.headers['ORIGIN']
         cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']
+    '''
 
     def shutdown(self) :
         print('===== Exiting =====')
@@ -83,6 +83,7 @@ class Alice(object):
 if __name__ == '__main__':
     load_modules()
     alice = Alice()
+    setattr(alice, 'weather', modules['weather'])
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
     conf = {
