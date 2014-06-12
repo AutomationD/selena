@@ -70,6 +70,10 @@ if __name__ == '__main__':
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = sys.exit
     conf = {
+        'global' : {
+            'server.socket_host': config.host,
+            'server.socket_port': config.port
+        },
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             'tools.sessions.on': True,
@@ -77,4 +81,5 @@ if __name__ == '__main__':
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
         }
     }
+    print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')
     cherrypy.quickstart(Alice(), '/', conf)
