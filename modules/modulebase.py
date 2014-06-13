@@ -1,5 +1,7 @@
 # !/usr/bin/env python3
 
+import cherrypy
+
 class ModuleBase(object) :
     exposed = True
 
@@ -7,10 +9,12 @@ class ModuleBase(object) :
         try :
             return getattr(self, 'GET_' + method)()
         except AttributeError as e :
-            return str(e)
+            cherrypy.response.status = 501
+            return 'Error: method \'' + method + '\' not found or not allowed for GET requests'
 
     def POST(self, method='', **kwarg) :
         try :
             return getattr(self, 'POST_' + method)()
         except AttributeError as e :
-            return str(e)
+            cherrypy.response.status = 501
+            return 'Error: method \'' + method + '\' not found or not allowed for POST requests'
