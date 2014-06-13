@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-class music :
-    def init(self) :
-        pass
+from .. import modulebase
 
-    def now_playing(self) :
+class music (modulebase.ModuleBase) :
+
+    def GET_now_playing(self) :
         return "Metallica - Master of Puppets"

@@ -8,28 +8,6 @@ import modules.registry as registry
 
 modules = {}
 
-def call_method(module, method, rest_method, **kwarg):
-    if module in modules:
-        try:
-            if method in dir(modules[module]):
-                method_full_name = module + '.' + method
-                func = registry.get_method(rest_method, method_full_name)
-
-                if func :
-                    return func(**kwarg)
-                else :
-                    cherrypy.response.status = 405
-                    return 'Method \'%s\' in module \'%s\' doesn\'t support %s requests' % ( method, module, rest_method )
-            else:
-                cherrypy.response.status = 501
-                return 'No method \'%s\' in module \'%s\'' % ( method, module )
-        except Exception as e:
-            cherrypy.response.status = 500
-            return 'Error: ' + str(e)
-    else:
-        cherrypy.response.status = 404
-        return 'No module named \'%s\'' % (module)
-
 def load_modules():
     for mod_name in config.module_list:
         mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
@@ -38,13 +16,6 @@ def load_modules():
         try :
             modules[mod_name] = getattr(mod, mod_name)()
 
-            # initialize the module
-            try :
-                init_func = getattr(modules[mod_name], 'init')
-                init_func()
-            except AttributeError as e :
-                print ('Error while initializing module \'' + mod_name + '\': ' + str(e))
-
         except AttributeError as e :
             print ('Error while loading module \'' + mod_name + '\': ' + str(e))
 
@@ -52,22 +23,21 @@ def load_modules():
 class Alice(object):
     exposed = True
 
-    '''
-    def GET(self, module, method='', **kwarg):
+    def GET(self, module, **kwarg) :
         if module == 'modules' :
             return json.dumps(config.module_list).encode('utf-8')
         else :
-            return call_method(module, method, 'GET', **kwarg)
+            cherrypy.response.status = 404
+            return 'No module named \'' + module + '\''
 
     def POST(self, module, method, **kwarg):
-        return call_method(module, method, 'POST', **kwarg)
+        return ''
 
     def OPTIONS(self):
         cherrypy.response.headers['Access-Control-Allow-Credentials'] = True
         cherrypy.response.headers['Access-Control-Allow-Origin'] = cherrypy.request.headers['ORIGIN']
         cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']
-    '''
 
     def shutdown(self) :
         print('===== Exiting =====')
@@ -83,7 +53,8 @@ class Alice(object):
 if __name__ == '__main__':
     load_modules()
     alice = Alice()
-    setattr(alice, 'weather', modules['weather'])
+    for mod_name in config.module_list :
+        setattr(alice, mod_name, modules[mod_name])
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
     conf = {

@@ -5,7 +5,6 @@ import time
 import urllib.request
 import json
 
-from .. import registry
 from .. import modulebase
 
 class weather(modulebase.ModuleBase):
@@ -20,9 +19,8 @@ class weather(modulebase.ModuleBase):
     data = None
     encode = lambda x : json.dumps(x).encode('utf-8')
 
-    def init(self) :
+    def __init__(self) :
         weather.data = WeatherData()
-        pass
 
     def deinit(self) :
         pass
