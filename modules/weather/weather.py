@@ -36,7 +36,8 @@ class weather:
         data = {
             'temp' : wd.cur_temp(),
             'weather' : wd.cur_weather(),
-            'humidity' : wd.cur_humidity()
+            'humidity' : wd.cur_humidity(),
+            'clouds' : wd.cur_clouds()
         }
         return weather.encode(data)
 
@@ -49,6 +50,7 @@ class WeatherData :
     def __init__(self) :
         self.__cur_temp = -1
         self.__humidity = -1
+        self.__clouds = -1
         self.__cur_weather = {}
 
         self.__lock = threading.Lock()
@@ -71,6 +73,10 @@ class WeatherData :
         with self.__lock :
             return self.__humidity
 
+    def cur_clouds(self) :
+        with self.__lock :
+            return self.__clouds
+
 
     '''
     Private setters
@@ -88,6 +94,10 @@ class WeatherData :
     def __set_cur_humidity(self, hum) :
         with self.__lock :
             self.__humidity = hum
+
+    def __set_cur_clouds(self, clouds) :
+        with self.__lock :
+            self.__clouds = clouds
 
 
     '''
@@ -118,6 +128,9 @@ class WeatherData :
                 wthr_id = weather[0].get('id', 0)
                 wthr_descr = weather[0].get('main', '')
                 self.__set_cur_weather(wthr_id, wthr_descr)
+
+            clouds = json_obj.get('clouds', {}).get('all', -1)
+            self.__set_cur_clouds(clouds)
 
             time.sleep(weather_check_interval)
 
