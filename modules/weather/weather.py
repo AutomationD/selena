@@ -16,7 +16,7 @@ city = 'Kanata,ON'
 cur_weather_url = ('http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric') % (city)
 
 
-class weather:
+class weather(modulebase.ModuleBase):
     data = None
     encode = lambda x : json.dumps(x).encode('utf-8')
 
@@ -33,7 +33,7 @@ class weather:
         }
         return weather.encode(data)
 
-    def GET_current() :
+    def GET_current(self) :
         wd = weather.data
         data = {
             'temp' : wd.cur_temp(),
@@ -43,7 +43,7 @@ class weather:
         }
         return weather.encode(data)
 
-    def GET_test(self) :
+    def POST_test(self) :
         return "Good!"
 
 
