@@ -4,24 +4,25 @@ import cherrypy
 import config
 import sys
 import json
-import modules.registry as registry
-
-modules = {}
-
-def load_modules():
-    for mod_name in config.module_list:
-        mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
-
-        # create a module instance
-        try :
-            modules[mod_name] = getattr(mod, mod_name)()
-
-        except AttributeError as e :
-            print ('Error while loading module \'' + mod_name + '\': ' + str(e))
-
 
 class Alice(object):
     exposed = True
+
+    def __init__(self) :
+        self.modules = {}
+
+        # load modules
+        for mod_name in config.module_list:
+            mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
+
+            # create a module instance
+            try :
+                mod_obj = getattr(mod, mod_name)()
+                self.modules[mod_name] = mod_obj
+                setattr(self, mod_name, mod_obj)
+
+            except AttributeError as e :
+                print ('Error while loading module \'' + mod_name + '\': ' + str(e))
 
     def GET(self, module, **kwarg) :
         if module == 'modules' :
@@ -51,10 +52,7 @@ class Alice(object):
         sys.exit()
 
 if __name__ == '__main__':
-    load_modules()
     alice = Alice()
-    for mod_name in config.module_list :
-        setattr(alice, mod_name, modules[mod_name])
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
     conf = {
