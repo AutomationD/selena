@@ -37,6 +37,10 @@ class weather(modulebase.ModuleBase):
         }
         return weather.encode(data)
 
+    def GET_forecast(self, days=3) :
+        data = {}
+        return weather.encode(data)
+
     def POST_test(self) :
         return "Good!"
 
