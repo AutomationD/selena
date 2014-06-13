@@ -9,17 +9,8 @@ class weather(modulebase.ModuleBase):
     def init(self) :
         pass
 
-    #@registry.GET('weather')
-    def temperature(self):
+    def GET_temperature(self):
         return "Temp: 20 C"
 
-    @registry.POST('weather')
-    def test() :
+    def GET_test(self) :
         return "Good!"
-
-    '''def GET(self, method='', **kwarg) :
-        try :
-            return getattr(self, method)()
-        except AttributeError as e :
-            return str(e)
-    '''

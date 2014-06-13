@@ -5,6 +5,12 @@ class ModuleBase(object) :
 
     def GET(self, method='', **kwarg) :
         try :
-            return getattr(self, method)()
+            return getattr(self, 'GET_' + method)()
+        except AttributeError as e :
+            return str(e)
+
+    def POST(self, method='', **kwarg) :
+        try :
+            return getattr(self, 'POST_' + method)()
         except AttributeError as e :
             return str(e)
