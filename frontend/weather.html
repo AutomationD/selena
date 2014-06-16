@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head><title>WebMPC</title>
+
+<meta charset="utf-8">
+
+<link rel="stylesheet" type="text/css" href="css/pepper-grinder/jquery-ui-1.10.3.custom.css">
+<link rel="stylesheet" type="text/css" href="css/css.css">
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="js/jquery.nicescroll.min.js"></script>
+<script src="js/alice.js"></script>
+<script src="js/callbacks.js"></script>
+
+<script>
+
+function log(text) {
+	console.log(text);
+}
+
+function updateWeather(weather) {
+    log(weather);
+}
+
+function onTimer() {
+	Alice.getWeather();
+}
+
+$(function() {
+
+    var textColor = "#303030";
+    var bgColor = "#e0e0e0";
+
+	////////////////////////////////////
+	// UI
+
+	$("body").disableSelection();
+
+	// init buttons background
+	$("body").css("color", textColor);
+	$("body").css("background", bgColor);
+
+    //Alice.setHost('localhost', 8888);
+	Alice.setHost( '127.0.0.1', 8888 );
+	Alice.getWeather();
+
+	// start the timer
+	window.setInterval( onTimer, 5000 );
+});
+
+</script>
+
+
+</head>
+<body>
+
+<div id="content">
+    <div id="weather">
+        <div id="temperature">-- C</div>
+        <div id="weather">--</div>
+    </div>
+</div>
+
+
+</body>
+</html>
