@@ -7,13 +7,9 @@ import json
 
 from .. import modulebase
 
-class weather(modulebase.ModuleBase):
-    exposed = True
-
 weather_check_interval = 60 # check every minute
 city = 'Kanata,ON'
 cur_weather_url = ('http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric') % (city)
-
 
 class weather(modulebase.ModuleBase):
     data = None
