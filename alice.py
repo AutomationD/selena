@@ -37,7 +37,7 @@ class Alice(object):
 
     def OPTIONS(self):
         cherrypy.response.headers['Access-Control-Allow-Credentials'] = True
-        # cherrypy.response.headers['Access-Control-Allow-Origin'] = cherrypy.request.headers['ORIGIN']
+        cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
         cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
         cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']        
 
