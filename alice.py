@@ -4,6 +4,7 @@ import cherrypy
 import config
 import sys
 import json
+import os
 
 class Alice(object):
     exposed = True
@@ -36,9 +37,10 @@ class Alice(object):
 
     def OPTIONS(self):
         cherrypy.response.headers['Access-Control-Allow-Credentials'] = True
-        cherrypy.response.headers['Access-Control-Allow-Origin'] = cherrypy.request.headers['ORIGIN']
+        # cherrypy.response.headers['Access-Control-Allow-Origin'] = cherrypy.request.headers['ORIGIN']
         cherrypy.response.headers['Access-Control-Allow-Methods'] = 'GET, POST'
-        cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']
+        cherrypy.response.headers['Access-Control-Allow-Headers'] = cherrypy.request.headers['ACCESS-CONTROL-REQUEST-HEADERS']        
+
 
     def shutdown(self) :
         print('===== Exiting =====')
@@ -55,6 +57,7 @@ if __name__ == '__main__':
     alice = Alice()
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
+    BASEDIR = os.path.dirname(os.path.realpath(__file__))
     conf = {
         'global' : {
             'server.socket_host': config.host,
@@ -65,6 +68,9 @@ if __name__ == '__main__':
             'tools.sessions.on': True,
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
+            'tools.staticdir.on' : True,
+            'tools.staticdir.dir' : os.path.join(BASEDIR,'frontend'),
+            'tools.staticdir.index' : 'weather.html'
         }
     }
     print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')
