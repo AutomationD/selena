@@ -1,15 +1,14 @@
-
 var Alice = {
 
-	url_base : "",
+    url_base: "",
 
-	setHost : function(host, port) {
-		url_base = 'http://' + host + ":" + port;
-	},
+    setHost: function(host, port) {
+        url_base = 'http://' + host + ":" + port;
+    },
 
 
-	getWeather : function() {
-		//$.get( url_base + '/weather/current', null, Callback.onWeather, 'json' );
+    getWeather: function() {
+        //$.get( url_base + '/weather/current', null, Callback.onWeather, 'json' );
 
         $.ajax({
             url: url_base + '/weather/current',
@@ -17,7 +16,16 @@ var Alice = {
             crossDomain: true,
             data: null,
             dataType: "json",
-            success: Callback.onWeather
+            success: function(data, status) {
+                // log("Song: " + status + ", data: " + data);
+                if (status === "success") {
+                    $("#temperature").html(data.temp);
+                    $("#weather2").html(data.weather.descr);
+                } else {
+                    // TODO :
+                }
+            }
         });
-	}
+
+    }
 };
