@@ -70,7 +70,7 @@ if __name__ == '__main__':
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
             'tools.staticdir.on' : True,
             'tools.staticdir.dir' : os.path.join(BASEDIR,'frontend'),
-            'tools.staticdir.index' : 'weather.html'
+            'tools.staticdir.index' : 'index.html'
         }
     }
     print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')
