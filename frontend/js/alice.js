@@ -17,13 +17,16 @@ var Alice = {
             data: null,
             dataType: "json",
             success: function(data, status) {
-                // log("Song: " + status + ", data: " + data);
                 if (status === "success") {
-                    $("#temperature").html(data.temp);
+                    $("#temperature").html(data.temp + " C");
                     $("#weather2").html(data.weather.descr);
                 } else {
                     // TODO :
                 }
+            },
+            error: function(data, status) {
+                $("#temperature").html('-- C');
+                $("#weather2").html('--');
             }
         });
 
