@@ -26,6 +26,11 @@ body {
 	font-size: 32pt;
 }
 
-#weather {
+#weather2 {
 	font-size: 20pt;
+}
+
+#forecast {
+	padding-top: 50px;
+    text-align: center;
 }

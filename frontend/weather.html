@@ -20,6 +20,7 @@ function log(text) {
 
 function onTimer() {
 	Alice.getWeather();
+	Alice.getForecast();
 }
 
 $(function() {
@@ -39,6 +40,7 @@ $(function() {
     Alice.setHost('localhost', 8888);
 	// Alice.setHost( '127.0.0.1', 8888 );
 	Alice.getWeather();
+	Alice.getForecast();
 
 	// start the timer
 	window.setInterval( onTimer, 5000 );
@@ -52,8 +54,11 @@ $(function() {
 
 <div id="content">
     <div id="weather">
-        <div id="temperature">-- C</div>
+        <div id="temperature">-- &deg;C</div>
         <div id="weather2">--</div>
+    </div>
+
+    <div id="forecast">
     </div>
 </div>
 
