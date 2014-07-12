@@ -10,6 +10,7 @@ from .. import modulebase
 weather_check_interval = 60 # check every minute
 city = 'Kanata,ON'
 cur_weather_url = ('http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric') % (city)
+forecast_url    = ('http://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric') % (city)
 
 class weather(modulebase.ModuleBase):
     data = None
@@ -37,8 +38,8 @@ class weather(modulebase.ModuleBase):
         }
         return weather.encode(data)
 
-    def GET_forecast(self, days=3) :
-        data = {}
+    def GET_forecast(self) :
+        data = weather.data.forecast()
         return weather.encode(data)
 
     def POST_test(self) :
@@ -51,6 +52,7 @@ class WeatherData :
         self.__humidity = -1
         self.__clouds = -1
         self.__cur_weather = {}
+        self.__forecast = []
 
         self.__lock = threading.Lock()
         self.__start_checker()
@@ -76,6 +78,9 @@ class WeatherData :
         with self.__lock :
             return self.__clouds
 
+    def forecast(self) :
+        with self.__lock :
+            return self.__forecast
 
     '''
     Private setters
@@ -97,6 +102,10 @@ class WeatherData :
     def __set_cur_clouds(self, clouds) :
         with self.__lock :
             self.__clouds = clouds
+
+    def __set_forecast(self, forecast) :
+        with self.__lock :
+            self.__forecast = forecast
 
 
     '''
@@ -130,6 +139,32 @@ class WeatherData :
 
             clouds = json_obj.get('clouds', {}).get('all', -1)
             self.__set_cur_clouds(clouds)
+
+            # get forecast
+            response = urllib.request.urlopen( urllib.request.Request(url=forecast_url) )
+            json_obj = json.loads(response.read().decode('utf-8'))
+
+            # extract data
+            data_list = json_obj.get('list', [])
+            fc_data = []
+
+            for list_item in data_list[:8] :
+                fc_item = {}
+                fc_item['timestamp'] = list_item.get('dt', 0)
+
+                fc_main = list_item.get('main', {})
+                fc_item['temp'] = fc_main.get('temp', -1)
+                fc_item['humidity'] = fc_main.get('humidity', -1)
+
+                fc_weather = list_item.get('weather', [])
+                fc_item['weather'] = {
+                    'id' : fc_weather[0].get('id', 0),
+                    'descr' : fc_weather[0].get('main', '')
+                } if len(fc_weather) > 0 else { 'id' : 0, 'descr': '' }
+
+                fc_data.append(fc_item)
+
+            self.__set_forecast(fc_data)
 
             time.sleep(weather_check_interval)
 
