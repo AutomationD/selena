@@ -9,6 +9,10 @@ body {
 }
 
 .module_content {
+	border-radius: 5px;
+	border: 1px solid #d0d0d0;
+	background-color: #f3f3f0;
+	padding: 20px;
 }
 
 a {
@@ -40,10 +44,6 @@ a {
 
 /* tab content */
 .ui-tabs-vertical .ui-tabs-panel {
-	width: 700px;
-	margin-left: 210px;
-	border-radius: 5px;
-	border: 1px solid #d0d0d0;
-	padding: 5px;
-	background-color: #f3f3f0;
+	margin: 0px;
+	padding: 0px 0px 0px 210px;
 }
