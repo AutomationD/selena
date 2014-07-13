@@ -71,9 +71,12 @@ $(function() {
 
 
 	module_loader.on_all_modules_loaded = function() {
+		var content = '';
 		for (var i = 0; i < module_loader.modules.length; i++) {
 			console.log("Loaded module " + module_loader.modules[i].name);
+			content += "Loaded module " + module_loader.modules[i].name + "<br />";
 		}
+        $("#content").html(content);
 	};
 
 
