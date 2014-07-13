@@ -1,0 +1,72 @@
+/*
+	Gereral
+*/
+
+body {
+	font-family: "Tahoma", "Verdana", "Arial";
+	/*font-size: 10pt;*/
+	margin: 0px;
+}
+
+/*
+#content {
+	padding: 0px 0px 0px 0px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+#weather {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#temperature {
+	font-size: 32pt;
+}
+
+#weather2 {
+	font-size: 20pt;
+}
+
+#forecast {
+	padding-top: 50px;
+    text-align: center;
+}
+*/
+
+.module_content {
+	background-color: #f3f3f0;
+}
+
+/* navigation panel */
+.ui-tabs-vertical .ui-tabs-nav {
+	padding-top: 50px;
+
+	margin: 0px;
+	float: left;
+	width: 100px;
+	background-color: #f0f0f0;
+	list-style-type: none;
+}
+
+/* navigation item */
+.ui-tabs-vertical .ui-tabs-nav li {
+	padding: 5px;
+	margin: 5px;
+	background-color: #c0c0c0;
+}
+
+/* navigation item - active */
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	background-color: #909090;
+}
+
+/* tab content */
+.ui-tabs-vertical .ui-tabs-panel {
+	width: 700px;
+	background-color: green;
+	margin-left: 150px;
+}
