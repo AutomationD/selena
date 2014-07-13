@@ -15,6 +15,11 @@ function getModule() {
 			this.getWeather();
 		},
 
+		update: function() {
+			this.getWeather();
+		},
+
+
 
 		formatTemp : function(temperature) {
 			if ( temperature == '--' ) {

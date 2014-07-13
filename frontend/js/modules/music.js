@@ -12,6 +12,12 @@ function getModule() {
 			this.getNowPlaying();
 		},
 
+		update: function() {
+			this.getNowPlaying();
+		},
+
+
+
 		getNowPlaying: function() {
 			$.get( this.base_url + '/music/now_playing')
 				.done(

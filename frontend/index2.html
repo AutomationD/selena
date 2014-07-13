@@ -102,6 +102,13 @@ $(function() {
 		)
 	;
 
+	window.setInterval(
+		function() {
+			for (var i = 0; i < module_loader.modules.length; i++) {
+				module_loader.modules[i].update();
+			}
+		}, 5000
+	);
 });
 
 </script>
