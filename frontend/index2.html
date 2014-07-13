@@ -4,8 +4,8 @@
 
 <meta charset="utf-8">
 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="css/css.css">
-<!-- <link rel="stylesheet" type="text/css" href="css/pepper-grinder/jquery-ui-1.10.3.custom.css"> -->
 
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -14,6 +14,7 @@
 
 $(function() {
 
+	var base_url = 'http://localhost:8888';
 	var html_head = document.getElementsByTagName("head")[0];
 
 	var module_loader = {
@@ -62,13 +63,10 @@ $(function() {
 				}
 			}
 
-
 			html_head.appendChild(scr);
 		},
 
-		'on_all_modules_loaded': function() {
-
-		}
+		'on_all_modules_loaded': function() {}
 
 	};
 
@@ -86,20 +84,23 @@ $(function() {
 			// tab content
 			var tab_content = '\n<div id="tabs-' + i + '">\n' + module.content() + '\n</div>';
 			$("#tabs").html( $("#tabs").html() + tab_content );
-		}
-        // console.log( $("#tab_list").html() );
 
-	    $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-	    $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+			module.base_url = base_url;
+			module.start();
+		}
+		// console.log( $("#tab_list").html() );
+
+		$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+		$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 	};
 
-    $.get( 'http://localhost:8888/modules')
-        .done(
-            function( data ) {
+	$.get( base_url + '/modules')
+		.done(
+			function( data ) {
 				module_loader.load_modules( jQuery.parseJSON(data) );
-            }
-        )
-    ;
+			}
+		)
+	;
 
 });
 

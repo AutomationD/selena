@@ -8,65 +8,42 @@ body {
 	margin: 0px;
 }
 
-/*
-#content {
-	padding: 0px 0px 0px 0px;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-
-#weather {
-    text-align: center;
-    margin-top: 50px;
-}
-
-#temperature {
-	font-size: 32pt;
-}
-
-#weather2 {
-	font-size: 20pt;
-}
-
-#forecast {
-	padding-top: 50px;
-    text-align: center;
-}
-*/
-
 .module_content {
-	background-color: #f3f3f0;
+}
+
+a {
+	outline: 0px;
+	width: 160px;
 }
 
 /* navigation panel */
 .ui-tabs-vertical .ui-tabs-nav {
-	padding-top: 50px;
+	padding-top: 100px;
+	padding-bottom: 100px;
 
-	margin: 0px;
 	float: left;
-	width: 100px;
-	background-color: #f0f0f0;
+	width: 200px;
 	list-style-type: none;
 }
 
 /* navigation item */
 .ui-tabs-vertical .ui-tabs-nav li {
-	padding: 5px;
-	margin: 5px;
-	background-color: #c0c0c0;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	outline: 0px;
 }
 
 /* navigation item - active */
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
-	background-color: #909090;
 }
 
 /* tab content */
 .ui-tabs-vertical .ui-tabs-panel {
 	width: 700px;
-	background-color: green;
-	margin-left: 150px;
+	margin-left: 210px;
+	border-radius: 5px;
+	border: 1px solid #d0d0d0;
+	padding: 5px;
+	background-color: #f3f3f0;
 }
