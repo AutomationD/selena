@@ -1,0 +1,49 @@
+/*
+	Gereral
+*/
+
+body {
+	font-family: "Tahoma", "Verdana", "Arial";
+	/*font-size: 10pt;*/
+	margin: 0px;
+}
+
+.module_content {
+	border-radius: 5px;
+	border: 1px solid #d0d0d0;
+	background-color: #f3f3f0;
+	padding: 20px;
+}
+
+a {
+	outline: 0px;
+	width: 160px;
+}
+
+/* navigation panel */
+.ui-tabs-vertical .ui-tabs-nav {
+	padding-top: 100px;
+	padding-bottom: 100px;
+
+	float: left;
+	width: 200px;
+	list-style-type: none;
+}
+
+/* navigation item */
+.ui-tabs-vertical .ui-tabs-nav li {
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	outline: 0px;
+}
+
+/* navigation item - active */
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+}
+
+/* tab content */
+.ui-tabs-vertical .ui-tabs-panel {
+	margin: 0px;
+	padding: 0px 0px 0px 210px;
+}
