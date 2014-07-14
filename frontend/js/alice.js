@@ -31,28 +31,21 @@ var Alice = {
 
 
     getWeather: function() {
-        //$.get( url_base + '/weather/current', null, Callback.onWeather, 'json' );
-
-        $.ajax({
-            url: url_base + '/weather/current',
-            type: "GET",
-            crossDomain: true,
-            data: null,
-            dataType: "json",
-            success: function(data, status) {
-                if (status === "success") {
-                    $("#temperature").html(formatTemp(data.temp));
-                    $("#weather2").html(data.weather.descr);
-                } else {
-                    // TODO :
+        $.get( url_base + '/weather/current')
+            .done(
+                function( data ) {
+                    var obj = jQuery.parseJSON(data);
+                    $("#temperature").html(formatTemp(obj.temp));
+                    $("#weather2").html(obj.weather.descr);
                 }
-            },
-            error: function(data, status) {
-                $("#temperature").html(formatTemp('--'));
-                $("#weather2").html('--');
-            }
-        });
-
+            )
+            .fail(
+                function() {
+                    $("#temperature").html(formatTemp('--'));
+                    $("#weather2").html('--');
+                }
+            )
+        ;
     },
 
     getForecast: function() {
@@ -70,7 +63,7 @@ var Alice = {
             )
             .fail(
                 function() {
-                    // log("error")
+                    $("#forecast").html('<b>Forecast:<br/></b>--');
                 }
             )
         ;
