@@ -31,6 +31,7 @@ class weather(modulebase.ModuleBase):
     def GET_current(self) :
         wd = weather.data
         data = {
+            'city' : city,
             'temp' : wd.cur_temp(),
             'weather' : wd.cur_weather(),
             'humidity' : wd.cur_humidity(),

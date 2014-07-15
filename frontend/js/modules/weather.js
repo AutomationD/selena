@@ -6,8 +6,9 @@ function getModule() {
 
 		content: function() {
 			return '<div class="module_content" id="weather_content">' +
+			'<div id="weather_city"></div>\n' +
 			'<div id="weather_temperature"></div>\n' +
-			'<div id="weather"></div>\n' +
+			'<div id="weather_descr"></div>\n' +
 			'<div id="weather_forecast"></div>\n' +
 			'</div>';
 		},
@@ -52,14 +53,16 @@ function getModule() {
 				.done(
 					function( data ) {
 						var obj = jQuery.parseJSON(data);
+						$("#weather_city").html( '<h3>' + obj.city + '</h3>' );
 						$("#weather_temperature").html( '<h1>' + weatherModule.formatTemp(obj.temp) + '</h1>' );
-						$("#weather").html('<h4>' + obj.weather.descr + '</h4>');
+						$("#weather_descr").html('<h4>' + obj.weather.descr + '</h4>');
 					}
 				)
 				.fail(
 					function() {
+						$("#weather_city").html('<h3>--</h3>');
 						$("#weather_temperature").html( '<h1>' + weatherModule.formatTemp('--') + '</h1>');
-						$("#weather").html('<h4>--</h4>');
+						$("#weather_descr").html('<h4>--</h4>');
 					}
 				)
 			;
