@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head><title>WebMPC</title>
+<head><title>Alice</title>
 
 <meta charset="utf-8">
 
@@ -32,33 +32,54 @@
 <!-- <script src="js/docs.js"></script> -->
 
 
+<style>
+	/* To prevent 'blinking' when loading all tabs' contents - reset to 'visible' after all the data is loaded. */
+	.tab_content {
+		visibility: hidden;
+	}
+</style>
+
+
 <script>
+
+function create_tab(index, title) {
+	return '<li id="tab-' + index + '"><a href="#">' + title + '</a></li>';
+}
+
+function create_tab_content(index, content) {
+	return '<div id="content-tab-' + index + '" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tab_content">' + content + '</div>';
+}
 
 $(function() {
 
+	// set the base URL
 	var base_url = 'http://localhost:8888';
-	var html_head = document.getElementsByTagName("head")[0];
+
+	// keeping the currently shown tab
 	var current_tab_id = '';
 
+	// call this once all modules are loaded
 	ModuleLoader.on_all_modules_loaded = function() {
-		var content = '';
+
+		// create tabs
 		for (var i = 0; i < ModuleLoader.modules.length; i++) {
 			var module = ModuleLoader.modules[i];
 
 			// tab itself
-			var tab = '<li id="tab-' + i + '"><a href="#">' + module.title + '</a></li>';
-			$("#tab_list").html( $("#tab_list").html() + '\n' + tab );
+			$("#tab_list").html( $("#tab_list").html() + '\n' + create_tab( i, module.title ) );
 
 			// tab content
-			var tab_content = '<div id="content-tab-' + i + '"><div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tab_content">' + module.content() + '</div>';
-			$("#tabs").html( $("#tabs").html() + tab_content );
+			$("#tabs").html( $("#tabs").html() + '\n' + create_tab_content( i, module.content() ) );
 			$("#content-tab-" + i).hide();
 
+			// initialize and start module
 			module.base_url = base_url;
 			module.start();
 		}
 
-		// did it in a separate cycle intentionally - behaves weird when done in the previous cycle before all tabs are crerated
+		// assign click callbacks.
+		// did it in a separate cycle intentionally - behaves weird if done in the
+		// previous cycle before all the tabs are crerated
 		for (var i = 0; i < ModuleLoader.modules.length; i++) {
 			$("#tab-" + i).click( function() {
 				$(current_tab_id).hide();
@@ -67,12 +88,14 @@ $(function() {
 			});
 		}
 
+		// show the 1st tab, reset visibility that was initially unset
 		current_tab_id = '#content-tab-0';
 		$(current_tab_id).show();
 		$(".tab_content").css('visibility', 'visible');
 
 	};
 
+	// request the list of modules and load them
 	$.get( base_url + '/modules')
 		.done(
 			function( data ) {
@@ -81,6 +104,7 @@ $(function() {
 		)
 	;
 
+	// start the updte timer
 	window.setInterval(
 		function() {
 			for (var i = 0; i < ModuleLoader.modules.length; i++) {
@@ -91,15 +115,6 @@ $(function() {
 });
 
 </script>
-
-<!--style type="text/css" id="holderjs-style"></style-->
-
-<style>
-/* To prevent 'blinking' when loading all tabs' contents - reset to 'visible' after all the data is loaded. */
-.tab_content {
-	visibility: hidden;
-}
-</style>
 
 </head>
 <body>
@@ -124,10 +139,13 @@ $(function() {
 <div class="container-fluid">
 	<div class="row" id="tabs">
 		<div class="col-sm-3 col-md-2 sidebar">
+			<!-- sidebar -->
 			<ul class="nav nav-sidebar" id="tab_list">
 			</ul>
-		</div>
 
+			<!-- tabs go in here -->
+
+		</div>
 	</div>
 </div>
 
