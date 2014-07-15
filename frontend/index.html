@@ -1,111 +1,115 @@
 <!doctype html>
 <html lang="en">
-<head><title>WebMPC</title>
+<head><title>Alice</title>
 
 <meta charset="utf-8">
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="css/css.css">
 
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!--script src="js/ie-emulation-modes-warning.js"></script-->
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-ui-1.10.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/module_loader.js"></script>
+<!-- <script src="js/docs.js"></script> -->
+
+
+<style>
+	/* To prevent 'blinking' when loading all tabs' contents - reset to 'visible' after all the data is loaded. */
+	.tab_content {
+		visibility: hidden;
+	}
+</style>
+
+
 <script>
+
+function create_tab(index, title) {
+	return '<li class="tab" id="tab-' + index + '"><a href="#">' + title + '</a></li>';
+}
+
+function create_tab_content(index, content) {
+	return '<div id="content-tab-' + index + '" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tab_content">' + content + '</div>';
+}
 
 $(function() {
 
+	// set the base URL
 	var base_url = 'http://localhost:8888';
-	var html_head = document.getElementsByTagName("head")[0];
+	var colors = [ '#aa00ff', '#00aba9', '#d80073', '#60a917', '#f0a30a', '#87794e' ]
 
-	var module_loader = {
-		'module_names': [],
-		'modules': [],
+	// keeping the currently shown tab
+	var current_tab_id = '';
 
-		'load_modules': function (module_names) {
-			this.module_names = module_names;
-			this.cur_mod_index = -1;
-			this.load_next_module();
+	// call this once all modules are loaded
+	ModuleLoader.on_all_modules_loaded = function() {
 
-		},
-
-		'load_next_module': function() {
-			this.cur_mod_index++;
-			if ( this.cur_mod_index < this.module_names.length ) {
-				this.load_module(this.module_names[this.cur_mod_index]);
-			}
-			else {
-				this.on_all_modules_loaded();
-			}
-		},
-
-		'cur_mod_index': -1,
-		'loaded': false,
-
-		'load_module': function (module_name) {
-			this.loaded = false;
-			var scr = document.createElement('script');
-			scr.src = 'js/modules/' + module_name + '.js';
-			
-			var loader = this;
-
-			scr.onload = scr.onreadystatechange = function() {
-				if ( !loader.loaded && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') ) {
-					loader.loaded = true;
-
-					var module = getModule();
-					loader.modules.push(module);
-					
-					this.onload = null;
-					this.onreadystatechange = null;
-					html_head.removeChild(this);
-
-					loader.load_next_module();
-				}
-			}
-
-			html_head.appendChild(scr);
-		},
-
-		'on_all_modules_loaded': function() {}
-
-	};
-
-
-	module_loader.on_all_modules_loaded = function() {
-		var content = '';
-		for (var i = 0; i < module_loader.modules.length; i++) {
-			var module = module_loader.modules[i];
-			// console.log("Loaded module " + module.title);
+		// create tabs
+		for (var i = 0; i < ModuleLoader.modules.length; i++) {
+			var module = ModuleLoader.modules[i];
 
 			// tab itself
-			var tab = '<li><a href="#tabs-' + i + '">' + module.title + '</a></li>';
-			$("#tab_list").html( $("#tab_list").html() + '\n' + tab );
+			$("#tab_list").html( $("#tab_list").html() + '\n' + create_tab( i, module.title ) );
 
 			// tab content
-			var tab_content = '\n<div id="tabs-' + i + '">\n' + module.content() + '\n</div>';
-			$("#tabs").html( $("#tabs").html() + tab_content );
+			$("#tabs").html( $("#tabs").html() + '\n' + create_tab_content( i, module.content() ) );
+			$("#content-tab-" + i).hide();
 
+			// initialize and start module
 			module.base_url = base_url;
 			module.start();
 		}
-		// console.log( $("#tab_list").html() );
 
-		$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-		$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+		// assign click callbacks.
+		// did it in a separate cycle intentionally - behaves weird if done in the
+		// previous cycle before all the tabs are crerated
+		for (var i = 0; i < ModuleLoader.modules.length; i++) {
+			$("#tab-" + i).click( function() {
+				$(current_tab_id).hide();
+				current_tab_id = '#content-' + this.id;
+				$(current_tab_id).show();
+			}).css('background-color', colors[i % colors.length]);
+		}
+
+		// show the 1st tab, reset visibility that was initially unset
+		current_tab_id = '#content-tab-0';
+		$(current_tab_id).show();
+		$(".tab_content").css('visibility', 'visible');
+
 	};
 
+	// request the list of modules and load them
 	$.get( base_url + '/modules')
 		.done(
 			function( data ) {
-				module_loader.load_modules( jQuery.parseJSON(data) );
+				ModuleLoader.load_modules( jQuery.parseJSON(data) );
 			}
 		)
 	;
 
+	// start the updte timer
 	window.setInterval(
 		function() {
-			for (var i = 0; i < module_loader.modules.length; i++) {
-				module_loader.modules[i].update();
+			for (var i = 0; i < ModuleLoader.modules.length; i++) {
+				ModuleLoader.modules[i].update();
 			}
 		}, 5000
 	);
@@ -116,9 +120,34 @@ $(function() {
 </head>
 <body>
 
-<div id="tabs">
-	<ul id="tab_list">
-	</ul>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="">Alice</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Dashboard</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Help</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row" id="tabs">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<!-- sidebar -->
+			<ul class="nav nav-sidebar" id="tab_list">
+			</ul>
+
+			<!-- tabs go in here -->
+
+		</div>
+	</div>
 </div>
 
 </body>

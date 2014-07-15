@@ -6,7 +6,7 @@ function getModule() {
 
 		content: function() {
 			return "<div class='module_content' id='weather_content'>" +
-			"<div id='temperature'></div><br />" +
+			"<div id='weather_temperature'></div><br />" +
 			"<div id='weather'></div>" +
 			"</div>";
 		},
@@ -23,10 +23,10 @@ function getModule() {
 
 		formatTemp : function(temperature) {
 			if ( temperature == '--' ) {
-				return '-- &deg;C';
+				return '<h1>-- &deg;C</h1>';
 			}
 			var temp = Math.round( temperature * 10 ) / 10;
-			return temp.toFixed(1) + ' &deg;C';
+			return '<h1>' + temp.toFixed(1) + ' &deg;C</h1>';
 		},
 
 		getWeather: function() {
@@ -36,8 +36,8 @@ function getModule() {
 				.done(
 					function( data ) {
 						var obj = jQuery.parseJSON(data);
-						$("#temperature").html( weatherModule.formatTemp(obj.temp) );
-						$("#weather").html(obj.weather.descr);
+						$("#weather_temperature").html( weatherModule.formatTemp(obj.temp) );
+						$("#weather").html('<h4>' + obj.weather.descr + '</h4>');
 					}
 				)
 			;

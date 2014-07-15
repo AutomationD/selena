@@ -22,12 +22,11 @@ function getModule() {
 			$.get( this.base_url + '/music/now_playing')
 				.done(
 					function( data ) {
-						$("#music_content").html( data );
+						$("#music_content").html( '<h3>' + data + '</h3>');
 					}
 				)
 			;
 		}
-
 
 	}
 }
