@@ -4,11 +4,32 @@
 
 <meta charset="utf-8">
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
 <link rel="stylesheet" type="text/css" href="css/css.css">
 
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!--script src="js/ie-emulation-modes-warning.js"></script-->
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-ui-1.10.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<!-- <script src="js/docs.js"></script> -->
+
 
 <script>
 
@@ -16,6 +37,7 @@ $(function() {
 
 	var base_url = 'http://localhost:8888';
 	var html_head = document.getElementsByTagName("head")[0];
+	var current_tab_id = '';
 
 	var module_loader = {
 		'module_names': [],
@@ -75,23 +97,33 @@ $(function() {
 		var content = '';
 		for (var i = 0; i < module_loader.modules.length; i++) {
 			var module = module_loader.modules[i];
-			// console.log("Loaded module " + module.title);
 
 			// tab itself
-			var tab = '<li><a href="#tabs-' + i + '">' + module.title + '</a></li>';
+			var tab = '<li id="tab-' + i + '"><a href="#">' + module.title + '</a></li>';
 			$("#tab_list").html( $("#tab_list").html() + '\n' + tab );
 
 			// tab content
-			var tab_content = '\n<div id="tabs-' + i + '">\n' + module.content() + '\n</div>';
+			var tab_content = '<div id="content-tab-' + i + '"><div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tab_content">' + module.content() + '</div>';
 			$("#tabs").html( $("#tabs").html() + tab_content );
+			$("#content-tab-" + i).hide();
 
 			module.base_url = base_url;
 			module.start();
 		}
-		// console.log( $("#tab_list").html() );
 
-		$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-		$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+		// did it in a separate cycle intentionally - behaves weird when done in the previous cycle before all tabs are crerated
+		for (var i = 0; i < module_loader.modules.length; i++) {
+			$("#tab-" + i).click( function() {
+				$(current_tab_id).hide();
+				current_tab_id = '#content-' + this.id;
+				$(current_tab_id).show();
+			});
+		}
+
+		current_tab_id = '#content-tab-0';
+		$(current_tab_id).show();
+		$(".tab_content").css('visibility', 'visible');
+
 	};
 
 	$.get( base_url + '/modules')
@@ -113,12 +145,43 @@ $(function() {
 
 </script>
 
+<!--style type="text/css" id="holderjs-style"></style-->
+
+<style>
+/* To prevent 'blinking' when loading all tabs' contents - reset to 'visible' after all the data is loaded. */
+.tab_content {
+	visibility: hidden;
+}
+</style>
+
 </head>
 <body>
 
-<div id="tabs">
-	<ul id="tab_list">
-	</ul>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Alice</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Dashboard</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Help</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row" id="tabs">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<ul class="nav nav-sidebar" id="tab_list">
+			</ul>
+		</div>
+
+	</div>
 </div>
 
 </body>

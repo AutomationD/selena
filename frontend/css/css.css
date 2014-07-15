@@ -15,10 +15,6 @@ body {
 	padding: 20px;
 }
 
-a {
-	outline: 0px;
-	width: 160px;
-}
 
 /* navigation panel */
 .ui-tabs-vertical .ui-tabs-nav {
