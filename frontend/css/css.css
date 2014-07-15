@@ -16,3 +16,12 @@
 	list-style-type: none;
 }
 
+.tab > a {
+	margin-bottom: 5px;
+	color: #f0f0f0;
+}
+
+.tab > a:hover,
+.tab > a:active {
+	color: #606060;
+}
