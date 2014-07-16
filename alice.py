@@ -14,7 +14,7 @@ class Alice(object):
 
         # load modules
         for mod_name in config.module_list:
-            mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
+            mod = __import__('modules.' + mod_name + '.app.' + mod_name, fromlist=[mod_name])
 
             # create a module instance
             try :
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
             'tools.staticdir.on' : True,
-            'tools.staticdir.dir' : os.path.join(BASEDIR,'frontend'),
+            'tools.staticdir.dir' : os.path.join(BASEDIR,'app'),
             'tools.staticdir.index' : 'index.html'
         }
     }

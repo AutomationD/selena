@@ -5,7 +5,7 @@ import time
 import urllib.request
 import json
 
-from .. import modulebase
+from ... import modulebase
 
 weather_check_interval = 60 # check every minute
 city = 'Kanata,ON'
