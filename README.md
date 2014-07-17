@@ -1,17 +1,17 @@
-Alice
+Selena
 =====
-To run Alice
+To run Selena
 ```
-python3 alice.py
+python3 selena.py
 
 ```
 
 With your browser go to localhost:8888
 
-# Alice Core
+# Selena Core
 - Central REST Api
 
-# Alice Modules
+# Selena Modules
 ## In Development
 - Weather (Shows current weather / Forecast)
 - Music ()
