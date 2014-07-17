@@ -5,7 +5,7 @@ import time
 import urllib.request
 import json
 
-from .. import modulebase
+from ... import modulebase
 
 weather_check_interval = 60 # check every minute
 city = 'Kanata,ON'
@@ -31,6 +31,7 @@ class weather(modulebase.ModuleBase):
     def GET_current(self) :
         wd = weather.data
         data = {
+            'city' : city,
             'temp' : wd.cur_temp(),
             'weather' : wd.cur_weather(),
             'humidity' : wd.cur_humidity(),

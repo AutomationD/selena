@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .. import modulebase
+from ... import modulebase
 
 class twitter (modulebase.ModuleBase) :
 
