@@ -25,3 +25,4 @@ With your browser go to localhost:8888
 - Show status / control torrent clients
 - Control AC Unit via raspberry pi (at least emulate remote buttons)
 - Task Scheduler
+- Gmail
