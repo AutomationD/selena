@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import cherrypy
-import config
+# import config
 import sys
 import json
 import os
+
+config = {}
 
 class Alice(object):
     exposed = True
@@ -13,7 +15,7 @@ class Alice(object):
         self.modules = {}
 
         # load modules
-        for mod_name in config.module_list:
+        for mod_name in config['module_list']:
             mod = __import__('modules.' + mod_name + '.' + mod_name, fromlist=[mod_name])
 
             # create a module instance
@@ -27,7 +29,7 @@ class Alice(object):
 
     def GET(self, module, **kwarg) :
         if module == 'modules' :
-            return json.dumps(config.module_list).encode('utf-8')
+            return json.dumps(config['module_list']).encode('utf-8')
         else :
             cherrypy.response.status = 404
             return 'No module named \'' + module + '\''
@@ -54,14 +56,19 @@ class Alice(object):
         sys.exit()
 
 if __name__ == '__main__':
+    print( sys.argv )
+    conf = open(sys.argv[1], 'r')
+    config = json.loads(conf.read())
+    print(config)
+
     alice = Alice()
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
     BASEDIR = os.path.dirname(os.path.realpath(__file__)) + '/../../static/core' # FIXME: probably this is ugly, change it later
     conf = {
         'global' : {
-            'server.socket_host': config.host,
-            'server.socket_port': config.port
+            'server.socket_host': config['host'],
+            'server.socket_port': config['port']
         },
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
@@ -85,5 +92,5 @@ if __name__ == '__main__':
             'tools.staticdir.dir' : os.path.join(BASEDIR, '../modules')
         }
     }
-    print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')
+    print('===== Starting Alice at \'' + config['host'] + ':' + str(config['port']) + '\' =====')
     cherrypy.quickstart(alice, '/', conf)
