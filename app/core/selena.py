@@ -57,7 +57,7 @@ if __name__ == '__main__':
     alice = Alice()
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
-    BASEDIR = os.path.dirname(os.path.realpath(__file__))
+    BASEDIR = os.path.dirname(os.path.realpath(__file__)) + '/../../static/core' # FIXME: probably this is ugly, change it later
     conf = {
         'global' : {
             'server.socket_host': config.host,
@@ -69,8 +69,20 @@ if __name__ == '__main__':
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
             'tools.staticdir.on' : True,
-            'tools.staticdir.dir' : os.path.join(BASEDIR, '../../static/core/html'), # FIXME: probably this is ugly, change it later
+            'tools.staticdir.dir' : os.path.join(BASEDIR, 'html'),
             'tools.staticdir.index' : 'index.html'
+        },
+        '/css': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir' : os.path.join(BASEDIR, 'css')
+        },
+        '/js': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir' : os.path.join(BASEDIR, 'js')
+        },
+        '/modules': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir' : os.path.join(BASEDIR, '../modules')
         }
     }
     print('===== Starting Alice at \'' + config.host + ':' + str(config.port) + '\' =====')

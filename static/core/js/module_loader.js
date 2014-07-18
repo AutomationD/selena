@@ -25,7 +25,7 @@ var ModuleLoader = {
     'load_module': function (module_name) {
         this.loaded = false;
         var scr = document.createElement('script');
-        scr.src = 'js/modules/' + module_name + '.js';
+        scr.src = 'modules/' + module_name + '/js/' + module_name + '.js';
 
         var loader = this;
         var html_head = document.getElementsByTagName("head")[0];
