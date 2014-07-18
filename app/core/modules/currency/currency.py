@@ -5,7 +5,7 @@ import time
 import urllib.request
 import json
 
-from ... import modulebase
+from .. import modulebase
 
 currency_check_interval = 5 * 60 # check every 5 minutes
 currency_list = [
