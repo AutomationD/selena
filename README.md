@@ -2,7 +2,7 @@ Selena
 =====
 To run Selena
 ```
-python3 app/core/selena.py
+python3 run.py
 
 ```
 
