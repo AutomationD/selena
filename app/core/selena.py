@@ -64,7 +64,7 @@ if __name__ == '__main__':
     alice = Alice()
 
     cherrypy.engine.signal_handler.handlers["SIGINT"] = alice.shutdown
-    BASEDIR = os.path.dirname(os.path.realpath(__file__)) + '/../../static/core' # FIXME: probably this is ugly, change it later
+    BASEDIR = os.path.dirname(os.path.realpath(__file__)) + '/../../static/core' # FIXME: probably this is ugly, change it later ## Maybe determine basedir in run.py?
     conf = {
         'global' : {
             'server.socket_host': config['host'],
@@ -90,6 +90,10 @@ if __name__ == '__main__':
         '/modules': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir' : os.path.join(BASEDIR, '../modules')
+        },
+        '/tests': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir' : os.path.join(BASEDIR, '../tests')
         }
     }
     print('===== Starting Alice at \'' + config['host'] + ':' + str(config['port']) + '\' =====')
